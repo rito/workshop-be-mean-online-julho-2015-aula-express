@@ -1,18 +1,9 @@
 var Model = require('./model')
-  , query = ''
   , msg = ''
   , Controller = {
       create: function(req, res) {
-
-        var dados = {
-          name: 'Heineken',
-          description: 'Até q eh boazinha',
-          alcohol: 5.5,
-          price: 3.5,
-          category: 'lager'
-        }
-
-        var model = new Model(dados);
+        var dados = req.body
+          , model = new Model(dados);
         model.save(function (err, data) {
           if (err){
             console.log('Erro: ', err);
@@ -26,6 +17,7 @@ var Model = require('./model')
         });
       }
     , retrieve: function(req, res) {
+      var query = {};
         Model.find(query, function (err, data) {
           if (err){
             console.log('Erro: ', err);
@@ -38,14 +30,23 @@ var Model = require('./model')
           res.json(msg);
         });
       }
+    , get: function(req, res) {
+        var query = {_id: req.params.id};
+        Model.findOne(query, function (err, data) {
+          if (err){
+            console.log('Erro: ', err);
+            msg = err;
+          }
+          else{
+            console.log('Sucesso:', data);
+            msg = data;
+          }
+          res.json(msg);
+        });
+      }
     , update: function(req, res) {
-        query = {name: /heineken/i};
-        var mod = {
-              name: 'Brahma'
-            , alcohol: 4
-            , price: 6
-            }
-          ;
+        var query = {_id: req.params.id}
+          , mod = req.body;
 
         Model.update(query, mod, function (err, data) {
           if (err){
@@ -60,7 +61,7 @@ var Model = require('./model')
         });
       }
     , delete: function(req, res) {
-        query = {name: /brahma/i};
+        var query = {_id: req.params.id};
 
         Model.remove(query, function (err, data) {
           if (err){
@@ -73,6 +74,48 @@ var Model = require('./model')
           }
           res.json(msg);
         });
+      }
+    , renderList: function(req, res) {
+      var query = {};
+        Model.find(query, function (err, data) {
+          if (err){
+            console.log('Erro: ', err);
+            res.render('error', err);
+          }
+          else{
+            console.log('Sucesso:', data);
+            res.render('list', {beers: data});
+          }
+        });
+      }
+    , renderGet: function(req, res) {
+        var query = {_id: req.params.id};
+        Model.findOne(query, function (err, data) {
+          if (err){
+            console.log('Erro: ', err);
+            res.render('error', err);
+          }
+          else{
+            console.log('Sucesso:', data);
+            res.render('get', {beer: data});
+          }
+        });
+      }
+    , renderEdit: function(req, res) {
+        var query = {_id: req.params.id};
+        Model.findOne(query, function (err, data) {
+          if (err){
+            console.log('Erro: ', err);
+            res.render('error', err);
+          }
+          else{
+            console.log('Sucesso:', data);
+            res.render('edit', {beer: data});
+          }
+        });
+      }
+    , renderCreate: function(req, res) {
+        res.render('create');
       }
     }
   ;

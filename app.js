@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var methodOverride  = require("method-override");
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -21,13 +22,22 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(methodOverride(function(req, res){
+  if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+    // look in urlencoded POST bodies and delete it
+    var method = req.body._method
+    delete req.body._method
+    return method
+  }
+}));
 app.use('/', routes);
 app.use('/users', users);
 
 var api = {};
 api.beers = require('./modules/beers/routes/api');
 app.use('/api/beers', api.beers);
+
+app.use('/beers', require('./modules/beers/routes'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
