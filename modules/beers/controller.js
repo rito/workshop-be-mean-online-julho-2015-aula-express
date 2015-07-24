@@ -87,6 +87,19 @@ var Model = require('./model')
           }
         });
       }
+    , renderGet: function(req, res) {
+        var query = {_id: req.params.id};
+        Model.findOne(query, function (err, data) {
+          if (err){
+            console.log('Erro: ', err);
+            res.render('error', err);
+          }
+          else{
+            console.log('Sucesso:', data);
+            res.render('get', {beer: data});
+          }
+        });
+      }
     }
   ;
 
