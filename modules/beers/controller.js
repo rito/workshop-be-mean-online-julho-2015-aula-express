@@ -3,10 +3,8 @@ var Model = require('./model')
   , msg = ''
   , Controller = {
       create: function(req, res) {
-
-        var dados = req.body;
-
-        var model = new Model(dados);
+        var dados = req.body
+          , model = new Model(dados);
         model.save(function (err, data) {
           if (err){
             console.log('Erro: ', err);
@@ -47,13 +45,8 @@ var Model = require('./model')
         });
       }
     , update: function(req, res) {
-        query = {name: /heineken/i};
-        var mod = {
-              name: 'Brahma'
-            , alcohol: 4
-            , price: 6
-            }
-          ;
+        var query = {_id: req.params.id}
+          , mod = req.body;
 
         Model.update(query, mod, function (err, data) {
           if (err){
