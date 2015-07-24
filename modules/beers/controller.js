@@ -1,5 +1,4 @@
 var Model = require('./model')
-  , query = ''
   , msg = ''
   , Controller = {
       create: function(req, res) {
@@ -61,7 +60,7 @@ var Model = require('./model')
         });
       }
     , delete: function(req, res) {
-        query = {name: /brahma/i};
+        var query = {_id: req.params.id};
 
         Model.remove(query, function (err, data) {
           if (err){
