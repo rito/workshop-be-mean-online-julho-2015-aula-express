@@ -4,13 +4,7 @@ var Model = require('./model')
   , Controller = {
       create: function(req, res) {
 
-        var dados = {
-          name: 'Heineken',
-          description: 'Até q eh boazinha',
-          alcohol: 5.5,
-          price: 3.5,
-          category: 'lager'
-        }
+        var dados = req.body;
 
         var model = new Model(dados);
         model.save(function (err, data) {
