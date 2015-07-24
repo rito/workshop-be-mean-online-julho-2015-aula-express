@@ -1,9 +1,9 @@
 extends layout
 
 block content
-  h1 Edição da cerveja #{beer.name}
+  h1 Cadastro da cerveja
 
-  form(method='POST', action='/api/beers/#{beer._id}')
+  form(method='POST', action='/api/beers')
     .form-group
       label(for='name') Name:
       input(type='text', name='name')
@@ -18,6 +18,6 @@ block content
       input(type='text', name='category')
     .form-group
       label(for='description') Description:
-      textarea(name='description') #{beer.description}
+      textarea(name='description')
     .form-group
       input(type='submit', value='CADASTRAR')
